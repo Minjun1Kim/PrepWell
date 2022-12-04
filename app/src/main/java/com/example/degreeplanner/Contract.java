@@ -15,6 +15,8 @@ public interface Contract {
     }
     public interface View2 {
 
+        void onClick();
+
         void OnError(String email_required);
 //        public void doWork();
 ////        public void display();

@@ -13,27 +13,28 @@ public class Presenter extends AppCompatActivity implements Contract.Presenter {
     public Contract.View2 view;
     static int num;
 
-    public Presenter(Contract.Model model, Contract.View2 view) {
+    public Presenter(Contract.Model model, Contract.View2 view, int num) {
         this.model = model;
         this.view = view;
+        this.num = num;
     }
 
     public int error_msg(String email_str, String pass_str) {
         if (TextUtils.isEmpty(email_str)) {
             view.OnError("Email Required");
-            return 1;
+            return 0;
         } else if (TextUtils.isEmpty(pass_str)) {
             view.OnError("Password Required");
-            return 1;
+            return 0;
 
         } else if (pass_str.length() < 6) {
             view.OnError("Password needs to be at least six characters");
-            return 1;
+            return 0;
         } else if (!email_str.contains("@gmail.com")) {
             view.OnError("Invalid Email");
-            return 1;
+            return 0;
         }
-        return 0;
+        return 1;
     }
     public int isAdm(String email){
         if(email.contains("admin")){
@@ -42,25 +43,23 @@ public class Presenter extends AppCompatActivity implements Contract.Presenter {
         else if (email.contains("student") ){
             return 0;
         }
-        return -1;
+        return 3;
     }
     public int login(String email, String pass) {
-        System.out.println("btn");
-        //Presenter.num=0;
-
-//        while (num == 0) {
-//            try {
-//                Thread.sleep(500);
-//            } catch (Exception ex) {
-//
-//            }
-//        }
+//        System.out.println("btn");
+//        System.out.println(model.login_btn(email,pass));
         return model.login_btn(email, pass);
     }
 
 
-
+    public static int getNum() {
+        return num;
     }
+
+    public static void setNum(int num) {
+        Presenter.num = num;
+    }
+}
 
 
 
