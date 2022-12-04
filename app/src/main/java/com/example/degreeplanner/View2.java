@@ -2,6 +2,7 @@ package com.example.degreeplanner;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,16 +17,13 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class View2 extends AppCompatActivity implements Contract.View2 {
+public class View2 extends AppCompatActivity implements View.OnClickListener, Contract.View2 {
 
     private Contract.Presenter presenter;
-    EditText email, pass;
-    String email_str, pass_str;
     TextView mCreateBtn, forgotTextLink;
     ProgressBar progressBar;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
-
     int n;
 
     public String get_email() {
@@ -44,97 +42,72 @@ public class View2 extends AppCompatActivity implements Contract.View2 {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-        //EditText email = (EditText) findViewById(R.id.Email);
-
-        //EditText pass = (EditText) findViewById(R.id.password);
-        //pass.setOnClickListener(this);
-
-        //Button mLoginBtn = (Button) findViewById(R.id.registerBtn);
-        //mLoginBtn.setOnClickListener(this);
-
-        //TextView reg = (TextView) findViewById(R.id.createText);
-        //reg.setOnClickListener(this);
-
-        //TextView forgotPass = (TextView) findViewById(R.id.forgotpassword);
-        //forgotPass.setOnClickListener(this);
-
-        presenter = new Presenter(new Model(), this, 0);
-        email = (EditText) findViewById(R.id.Email);
-        pass = (EditText) findViewById(R.id.password);
-        email_str = email.getText().toString().trim();
-        pass_str = pass.getText().toString().trim();
-        onClick2();
-
-
-    }
-
-    public void on(){
-        int status = presenter.login(email_str, pass_str);
-        int error= presenter.error_msg(email_str, pass_str);
-        if (error == 1) {
-            if (status==1) {
-                //progressBar.setVisibility(View.VISIBLE);
-                System.out.println("lllllllllllllllllllllllllll");
-                OnSuccess("Successfully logged in");
-                startActivity(new Intent(getApplicationContext(), MainActivity2.class));
-                finish();
-            } else if (status == 2) {
-                OnSuccess("Successfully logged in");
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-            }
+//        EditText email = (EditText) findViewById(R.id.Email);
+//        email.setOnClickListener(this);
 //
-        } else {
-            presenter.error_msg(email_str,pass_str);
-        }
+//        EditText pass = (EditText) findViewById(R.id.password);
+//        pass.setOnClickListener(this);
+
+        Button mLoginBtn = (Button) findViewById(R.id.registerBtn);
+        mLoginBtn.setOnClickListener(this);
+
+        TextView reg = (TextView) findViewById(R.id.createText);
+        reg.setOnClickListener(this);
+
+
+        presenter = new Presenter(new Model(), this);
     }
 
-    public void onClick2() {
 
-        TextView but2;
-        Button but1;
-        but1 = findViewById(R.id.registerBtn);
-        but2 = findViewById(R.id.createText);
 
-        email_str = email.getText().toString().trim();
-        pass_str = pass.getText().toString().trim();
-        on();
+    public void onClick(View view) {
+        EditText email = (EditText) findViewById(R.id.Email);
+        EditText pass = (EditText) findViewById(R.id.password);
 
-        but1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                email_str = email.getText().toString().trim();
-                pass_str = pass.getText().toString().trim();
-                int status = presenter.login(email_str, pass_str);
-                int error= presenter.error_msg(email_str, pass_str);
-                if (error == 1) {
-                    if (status==1) {
+        String email_str = get_email();
+        String pass_str = get_pass();
+
+        switch (view.getId()) {
+            case R.id.createText:
+                startActivity(new Intent(this, Register.class));
+                break;
+            case R.id.registerBtn:
+
+                if(presenter.error_msg(email_str,pass_str)==0) {
+                    if ((presenter.login(email_str,pass_str)== 1) && presenter.isAdm(email_str)==1){
                         //progressBar.setVisibility(View.VISIBLE);
-                        System.out.println("lllllllllllllllllllllllllll");
                         OnSuccess("Successfully logged in");
-                        startActivity(new Intent(getApplicationContext(), MainActivity2.class));
+                        startActivity(new Intent(this, MainActivity2.class));
                         finish();
-                    } else if (status == 2) {
-                        OnSuccess("Successfully logged in");
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        finish();
+                        break;
+
                     }
+                    if (presenter.login(email_str,pass_str)==2 && presenter.isAdm(email_str)==0) {
+                        OnSuccess("Successfully logged in");
+                        startActivity(new Intent(this, MainActivity.class));
+                        finish();
+                        break;
+                    }
+//                    if(presenter.error_toast(email_str,pass_str)==-1){
+//                        presenter.error_toast(email_str,pass_str);
 //
-                } else {
-                    presenter.error_msg(email_str,pass_str);
+//                        break;
+//                    }
+//                    else {
+//                        Toast.makeText(this, "shutup", Toast.LENGTH_SHORT).show();
+//                        OnError("Failed to log in");
+//                        startActivity(new Intent(this, View2.class));
+//                        finish();
+//                        break;
+//                    }
                 }
-            }
-        });
+                else if(presenter.error_msg(email_str,pass_str)==1){
+                    presenter.error_msg(email_str,pass_str);
+                    break;
+                }
 
-        but2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Register.class));
-                finish();
-            }
-        });
-
+              break;
+        }
     }
 
 //    && presenter.ruthere(email)==true
@@ -144,58 +117,9 @@ public class View2 extends AppCompatActivity implements Contract.View2 {
         Toast.makeText(this,successfully_logged_in, Toast.LENGTH_SHORT).show();
 
     }
-
-    @Override
-    public void onClick() {
-
-    }
-
     public void OnError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
     }
 
-//    @Override
-//    public void onClick(View view) {
-//        EditText email = (EditText) findViewById(R.id.Email);
-//        EditText pass = (EditText) findViewById(R.id.password);
-//
-//        String email_str = email.getText().toString().trim();
-//
-//        String pass_str = pass.getText().toString().trim();
-//        int status = presenter.login(email_str, pass_str);
-//        int error= presenter.error_msg(email_str, pass_str);
-////        startActivity(new Intent(this, MainActivity2.class));
-////        finish();
-//
-//        switch (view.getId()) {
-//            case R.id.createText:
-//                startActivity(new Intent(this, Register.class));
-//                break;
-//            case R.id.forgotpassword:
-//                startActivity(new Intent(this, AlertDialog.Builder.class));
-//                break;
-//
-//            case R.id.registerBtn:
-//
-//                if (error == 1) {
-//
-//                    if (status==1) {
-//                        //progressBar.setVisibility(View.VISIBLE);
-//                        System.out.println("lllllllllllllllllllllllllll");
-//                        OnSuccess("Successfully logged in");
-//                        startActivity(new Intent(this, MainActivity2.class));
-//                        finish();
-//                    } else if (status == 2) {
-//                        OnSuccess("Successfully logged in");
-//                        startActivity(new Intent(this, MainActivity.class));
-//                        finish();
-//                    }
-////
-//                }
-//                else {
-//                    presenter.error_msg(email_str,pass_str);
-//                }
-//        }
-//    }
 }
