@@ -54,7 +54,6 @@ public class View2 extends AppCompatActivity implements View.OnClickListener, Co
         TextView reg = (TextView) findViewById(R.id.createText);
         reg.setOnClickListener(this);
 
-
         presenter = new Presenter(new Model(), this);
     }
 

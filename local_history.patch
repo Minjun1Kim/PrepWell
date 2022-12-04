@@ -1,0 +1,31 @@
+Index: app/src/test/java/com/example/degreeplanner/ExampleUnitTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/test/java/com/example/degreeplanner/ExampleUnitTest.java b/app/src/test/java/com/example/degreeplanner/ExampleUnitTest.java
+--- a/app/src/test/java/com/example/degreeplanner/ExampleUnitTest.java	
++++ b/app/src/test/java/com/example/degreeplanner/ExampleUnitTest.java	(date 1670129468496)
+@@ -3,6 +3,7 @@
+ import org.junit.Test;
+ import org.junit.runner.RunWith;
+ import org.mockito.Mock;
++import static org.mockito.Mockito.verify;
+ import org.mockito.runners.MockitoJUnitRunner;
+ 
+ import static org.junit.Assert.*;
+@@ -23,8 +24,9 @@
+ 
+     @Test
+     public void testPresenter() {
+-        when(view.get_email().isEmpty());
+-//        when(model.login_btn(view.get_email(), view.get_pass()).equals("vadmin@gmail.com"));
++    }
++}
+ 
+-    }
+-}
+\ No newline at end of file
++
++
++
