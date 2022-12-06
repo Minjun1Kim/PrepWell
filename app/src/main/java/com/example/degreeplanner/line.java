@@ -2,6 +2,7 @@ package com.example.degreeplanner;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,7 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+//import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.units.qual.A;
 
 import java.lang.reflect.Array;
